@@ -21,6 +21,12 @@ import {getScale} from './DomUtil';
 // @alternative
 // @function on(el: HTMLElement, eventMap: Object, context?: Object): this
 // Adds a set of type/listener pairs, e.g. `{click: onClick, mousemove: onMouseMove}`
+/**
+ * @param {HTMLElement | Document | (Window & typeof globalThis)} obj
+ * @param {string | any[]} types
+ * @param {any} fn
+ * @param {undefined} [context]
+ */
 export function on(obj, types, fn, context) {
 
 	if (typeof types === 'object') {
@@ -48,6 +54,12 @@ var eventsKey = '_leaflet_events';
 // @alternative
 // @function off(el: HTMLElement, eventMap: Object, context?: Object): this
 // Removes a set of type/listener pairs, e.g. `{click: onClick, mousemove: onMouseMove}`
+/**
+ * @param {(Window & typeof globalThis) | Document} obj
+ * @param {string | any[]} [types]
+ * @param {any} [fn]
+ * @param {any} [context]
+ */
 export function off(obj, types, fn, context) {
 
 	if (typeof types === 'object') {
@@ -83,6 +95,12 @@ var mouseSubst = {
 	wheel: !('onwheel' in window) && 'mousewheel'
 };
 
+/**
+ * @param {Object} obj
+ * @param {string} type
+ * @param {{ (e: any): any; (e: any): void; call?: any; }} fn
+ * @param {any} [context]
+ */
 function addOne(obj, type, fn, context) {
 	var id = type + Util.stamp(fn) + (context ? '_' + Util.stamp(context) : '');
 
@@ -127,6 +145,12 @@ function addOne(obj, type, fn, context) {
 	obj[eventsKey][id] = handler;
 }
 
+/**
+ * @param {any} obj
+ * @param {string} type
+ * @param {{ (e: any): any; (e: any): any; (): void; }} fn
+ * @param {{ (e: any): any; (e: any): any; (): void; }} [context]
+ */
 function removeOne(obj, type, fn, context) {
 
 	var id = type + Util.stamp(fn) + (context ? '_' + Util.stamp(context) : ''),
@@ -158,6 +182,9 @@ function removeOne(obj, type, fn, context) {
 // 	L.DomEvent.stopPropagation(ev);
 // });
 // ```
+/**
+ * @param {{ stopPropagation: () => void; originalEvent: { _stopped: boolean; }; cancelBubble: boolean; }} e
+ */
 export function stopPropagation(e) {
 
 	if (e.stopPropagation) {
@@ -174,6 +201,9 @@ export function stopPropagation(e) {
 
 // @function disableScrollPropagation(el: HTMLElement): this
 // Adds `stopPropagation` to the element's `'wheel'` events (plus browser variants).
+/**
+ * @param {HTMLElement} el
+ */
 export function disableScrollPropagation(el) {
 	addOne(el, 'wheel', stopPropagation);
 	return this;
@@ -182,6 +212,9 @@ export function disableScrollPropagation(el) {
 // @function disableClickPropagation(el: HTMLElement): this
 // Adds `stopPropagation` to the element's `'click'`, `'doubleclick'`,
 // `'mousedown'` and `'touchstart'` events (plus browser variants).
+/**
+ * @param {HTMLElement} el
+ */
 export function disableClickPropagation(el) {
 	on(el, 'mousedown touchstart dblclick', stopPropagation);
 	addOne(el, 'click', fakeStop);
@@ -193,6 +226,9 @@ export function disableClickPropagation(el) {
 // following a link in the href of the a element, or doing a POST request
 // with page reload when a `<form>` is submitted).
 // Use it inside listener functions.
+/**
+ * @param {any} e
+ */
 export function preventDefault(e) {
 	if (e.preventDefault) {
 		e.preventDefault();
@@ -204,6 +240,9 @@ export function preventDefault(e) {
 
 // @function stop(ev: DOMEvent): this
 // Does `stopPropagation` and `preventDefault` at the same time.
+/**
+ * @param {any} e
+ */
 export function stop(e) {
 	preventDefault(e);
 	stopPropagation(e);
@@ -213,6 +252,10 @@ export function stop(e) {
 // @function getMousePosition(ev: DOMEvent, container?: HTMLElement): Point
 // Gets normalized mouse position from a DOM event relative to the
 // `container` (border excluded) or to the whole page if not specified.
+/**
+ * @param {any} e
+ * @param {HTMLElement} container
+ */
 export function getMousePosition(e, container) {
 	if (!container) {
 		return new Point(e.clientX, e.clientY);
@@ -240,6 +283,9 @@ var wheelPxFactor =
 // pixels scrolled (negative if scrolling down).
 // Events from pointing devices without precise scrolling are mapped to
 // a best guess of 60 pixels.
+/**
+ * @param {any} e
+ */
 export function getWheelDelta(e) {
 	return (Browser.edge) ? e.wheelDeltaY / 2 : // Don't trust window-geometry-based delta
 	       (e.deltaY && e.deltaMode === 0) ? -e.deltaY / wheelPxFactor : // Pixels
@@ -253,12 +299,16 @@ export function getWheelDelta(e) {
 }
 
 var skipEvents = {};
-
+/**
+ * @param {any} e
+ */
 export function fakeStop(e) {
 	// fakes stopPropagation by setting a special event flag, checked/reset with skipped(e)
 	skipEvents[e.type] = true;
 }
-
+/**
+ * @param {any} e
+ */
 export function skipped(e) {
 	var events = skipEvents[e.type];
 	// reset when checking, as it's only used in map container and propagates outside of the map
@@ -267,6 +317,10 @@ export function skipped(e) {
 }
 
 // check if element really left/entered the event target (for mouseenter/mouseleave)
+/**
+ * @param {HTMLElement} el
+ * @param {any} e
+ */
 export function isExternalTarget(el, e) {
 
 	var related = e.relatedTarget;

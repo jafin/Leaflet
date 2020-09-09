@@ -18,6 +18,12 @@ var _pointerDocListener = false;
 // Provides a touch events wrapper for (ms)pointer events.
 // ref http://www.w3.org/TR/pointerevents/ https://www.w3.org/Bugs/Public/show_bug.cgi?id=22890
 
+/**
+ * @param {any} obj
+ * @param {string} type
+ * @param {(e: any) => any} handler
+ * @param {string} id
+ */
 export function addPointerListener(obj, type, handler, id) {
 	if (type === 'touchstart') {
 		_addPointerStart(obj, handler, id);
@@ -32,6 +38,11 @@ export function addPointerListener(obj, type, handler, id) {
 	return this;
 }
 
+/**
+ * @param {{ [x: string]: any; removeEventListener: (arg0: string, arg1: any, arg2: boolean) => void; }} obj
+ * @param {string} type
+ * @param {string} id
+ */
 export function removePointerListener(obj, type, id) {
 	var handler = obj['_leaflet_' + type + id];
 
@@ -49,6 +60,11 @@ export function removePointerListener(obj, type, id) {
 	return this;
 }
 
+/**
+ * @param {{ [x: string]: any; addEventListener: (arg0: string, arg1: any, arg2: boolean) => void; }} obj
+ * @param {(e: any) => any} handler
+ * @param {string} id
+ */
 function _addPointerStart(obj, handler, id) {
 	var onDown = Util.bind(function (e) {
 		// IE10 specific: MsTouch needs preventDefault. See #2000
@@ -74,20 +90,31 @@ function _addPointerStart(obj, handler, id) {
 	}
 }
 
+/**
+ * @param {any} e
+ */
 function _globalPointerDown(e) {
 	_pointers[e.pointerId] = e;
 }
-
+/**
+ * @param {any} e
+ */
 function _globalPointerMove(e) {
 	if (_pointers[e.pointerId]) {
 		_pointers[e.pointerId] = e;
 	}
 }
-
+/**
+ * @param {any} e
+ */
 function _globalPointerUp(e) {
 	delete _pointers[e.pointerId];
 }
 
+/**
+ * @param {any} e
+ * @param {{ (e: any): any; (arg0: any): void; }} handler
+ */
 function _handlePointer(e, handler) {
 	e.touches = [];
 	for (var i in _pointers) {
@@ -98,7 +125,15 @@ function _handlePointer(e, handler) {
 	handler(e);
 }
 
+/**
+ * @param {any} obj
+ * @param {{ (e: any): any; (e: any): any; (arg0: any): void; }} handler
+ * @param {string} id
+ */
 function _addPointerMove(obj, handler, id) {
+	/**
+	 * @param {{ pointerType: any; MSPOINTER_TYPE_MOUSE: any; buttons: number; }} e
+	 */
 	var onMove = function (e) {
 		// don't fire touch moves when mouse isn't down
 		if ((e.pointerType === (e.MSPOINTER_TYPE_MOUSE || 'mouse')) && e.buttons === 0) {

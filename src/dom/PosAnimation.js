@@ -1,6 +1,10 @@
 import * as Util from '../core/Util';
 import {Evented} from '../core/Events';
 import * as DomUtil from '../dom/DomUtil';
+// eslint-disable-next-line no-unused-vars
+import {Point} from '../geometry/Point';
+// eslint-disable-next-line no-unused-vars
+import {LeafletHTMLElement} from './LeafletHTMLElement';
 
 
 /*
@@ -20,6 +24,7 @@ import * as DomUtil from '../dom/DomUtil';
  *
  */
 
+// @ts-ignore
 export var PosAnimation = Evented.extend({
 
 	// @method run(el: HTMLElement, newPos: Point, duration?: Number, easeLinearity?: Number)
@@ -27,6 +32,12 @@ export var PosAnimation = Evented.extend({
 	// duration in seconds (`0.25` by default) and easing linearity factor (3rd
 	// argument of the [cubic bezier curve](http://cubic-bezier.com/#0,0,.5,1),
 	// `0.5` by default).
+	/**
+	 * @param {LeafletHTMLElement} el
+	 * @param {Point} newPos
+	 * @param {number} [duration]
+	 * @param {number} [easeLinearity]
+	 */
 	run: function (el, newPos, duration, easeLinearity) {
 		this.stop();
 
@@ -61,6 +72,9 @@ export var PosAnimation = Evented.extend({
 		this._step();
 	},
 
+	/**
+	 * @param {any} round
+	 */
 	_step: function (round) {
 		var elapsed = (+new Date()) - this._startTime,
 		    duration = this._duration * 1000;
@@ -73,6 +87,10 @@ export var PosAnimation = Evented.extend({
 		}
 	},
 
+	/**
+	 * @param {any} progress
+	 * @param {any} round
+	 */
 	_runFrame: function (progress, round) {
 		var pos = this._startPos.add(this._offset.multiplyBy(progress));
 		if (round) {
@@ -94,6 +112,9 @@ export var PosAnimation = Evented.extend({
 		this.fire('end');
 	},
 
+	/**
+	 * @param {number} t
+	 */
 	_easeOut: function (t) {
 		return 1 - Math.pow(1 - t, this._easeOutPower);
 	}

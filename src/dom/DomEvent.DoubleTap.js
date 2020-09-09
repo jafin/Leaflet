@@ -9,11 +9,19 @@ var _touchend = Browser.msPointer ? 'MSPointerUp' : Browser.pointer ? 'pointerup
 var _pre = '_leaflet_';
 
 // inspired by Zepto touch code by Thomas Fuchs
+/**
+ * @param {{ [x: string]: any; addEventListener: (arg0: string, arg1: { (e: any): void; (e: any): void; }, arg2: boolean | { passive: boolean; }) => void; }} obj
+ * @param {{ (e: any): any; (arg0: any): void; }} handler
+ * @param {string} id
+ */
 export function addDoubleTapListener(obj, handler, id) {
 	var last, touch,
 	    doubleTap = false,
 	    delay = 250;
 
+	/**
+	 * @param {{ isPrimary: any; pointerType: string; touches: string | any[]; }} e
+	 */
 	function onTouchStart(e) {
 
 		if (Browser.pointer) {
@@ -31,6 +39,9 @@ export function addDoubleTapListener(obj, handler, id) {
 		last = now;
 	}
 
+	/**
+	 * @param {{ pointerType: string; }} e
+	 */
 	function onTouchEnd(e) {
 		if (doubleTap && !touch.cancelBubble) {
 			if (Browser.pointer) {
@@ -68,6 +79,10 @@ export function addDoubleTapListener(obj, handler, id) {
 	return this;
 }
 
+/**
+ * @param {{ [x: string]: any; removeEventListener: (arg0: string, arg1: any, arg2: boolean | { passive: boolean; }) => void; }} obj
+ * @param {string} id
+ */
 export function removeDoubleTapListener(obj, id) {
 	var touchstart = obj[_pre + _touchstart + id],
 	    touchend = obj[_pre + _touchend + id],

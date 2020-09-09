@@ -27,6 +27,11 @@ import {toLatLngBounds} from './LatLngBounds';
  * can't be added to it with the `include` function.
  */
 
+/**
+ * @param {number} lat
+ * @param {number} lng
+ * @param {number} [alt]
+ */
 export function LatLng(lat, lng, alt) {
 	if (isNaN(lat) || isNaN(lng)) {
 		throw new Error('Invalid LatLng object: (' + lat + ', ' + lng + ')');
@@ -50,6 +55,10 @@ export function LatLng(lat, lng, alt) {
 LatLng.prototype = {
 	// @method equals(otherLatLng: LatLng, maxMargin?: Number): Boolean
 	// Returns `true` if the given `LatLng` point is at the same position (within a small margin of error). The margin of error can be overridden by setting `maxMargin` to a small number.
+	/**
+	 * @param {LatLng} obj
+	 * @param {Number} [maxMargin]
+	 */
 	equals: function (obj, maxMargin) {
 		if (!obj) { return false; }
 
@@ -64,6 +73,9 @@ LatLng.prototype = {
 
 	// @method toString(): String
 	// Returns a string representation of the point (for debugging purposes).
+	/**
+	 * @param {Number} precision
+	 */
 	toString: function (precision) {
 		return 'LatLng(' +
 		        Util.formatNum(this.lat, precision) + ', ' +
@@ -72,6 +84,9 @@ LatLng.prototype = {
 
 	// @method distanceTo(otherLatLng: LatLng): Number
 	// Returns the distance (in meters) to the given `LatLng` calculated using the [Spherical Law of Cosines](https://en.wikipedia.org/wiki/Spherical_law_of_cosines).
+	/**
+	 * @param {LatLng} other
+	 */
 	distanceTo: function (other) {
 		return Earth.distance(this, toLatLng(other));
 	},
@@ -84,13 +99,16 @@ LatLng.prototype = {
 
 	// @method toBounds(sizeInMeters: Number): LatLngBounds
 	// Returns a new `LatLngBounds` object in which each boundary is `sizeInMeters/2` meters apart from the `LatLng`.
+	/**
+	 * @param {number} sizeInMeters
+	 */
 	toBounds: function (sizeInMeters) {
 		var latAccuracy = 180 * sizeInMeters / 40075017,
 		    lngAccuracy = latAccuracy / Math.cos((Math.PI / 180) * this.lat);
 
 		return toLatLngBounds(
-		        [this.lat - latAccuracy, this.lng - lngAccuracy],
-		        [this.lat + latAccuracy, this.lng + lngAccuracy]);
+		        new LatLng(this.lat - latAccuracy, this.lng - lngAccuracy),
+		        new LatLng(this.lat + latAccuracy, this.lng + lngAccuracy));
 	},
 
 	clone: function () {
@@ -111,11 +129,16 @@ LatLng.prototype = {
 // @factory L.latLng(coords: Object): LatLng
 // Expects an plain object of the form `{lat: Number, lng: Number}` or `{lat: Number, lng: Number, alt: Number}` instead.
 
+/**
+ * @param {number | LatLng |  number[] | object} a
+ * @param {number} [b]
+ * @param {number} [c]
+ */
 export function toLatLng(a, b, c) {
 	if (a instanceof LatLng) {
 		return a;
 	}
-	if (Util.isArray(a) && typeof a[0] !== 'object') {
+	if (Array.isArray(a) && typeof a[0] !== 'object') {
 		if (a.length === 3) {
 			return new LatLng(a[0], a[1], a[2]);
 		}

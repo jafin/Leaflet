@@ -1,4 +1,6 @@
 import * as LineUtil from './LineUtil';
+// eslint-disable-next-line no-unused-vars
+import {Point} from './Point';
 
 /*
  * @namespace PolyUtil
@@ -10,6 +12,11 @@ import * as LineUtil from './LineUtil';
  * Used by Leaflet to only show polygon points that are on the screen or near, increasing
  * performance. Note that polygon points needs different algorithm for clipping
  * than polyline, so there's a separate method for it.
+ */
+/**
+ * @param {Point[]} points
+ * @param {{ min: any; max: any; }} bounds
+ * @param {boolean} round
  */
 export function clipPolygon(points, bounds, round) {
 	var clippedPoints,

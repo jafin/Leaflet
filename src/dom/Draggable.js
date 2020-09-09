@@ -84,6 +84,9 @@ export var Draggable = Evented.extend({
 		this._moved = false;
 	},
 
+	/**
+	 * @param {{ _simulated: any; shiftKey: any; which: number; button: number; touches: any[]; type: string | number; }} e
+	 */
 	_onDown: function (e) {
 		// Ignore simulated events, since we handle both touch and
 		// mouse explicitly; otherwise we risk getting duplicates of
@@ -124,6 +127,9 @@ export var Draggable = Evented.extend({
 		DomEvent.on(document, END[e.type], this._onUp, this);
 	},
 
+	/**
+	 * @param {{ _simulated: any; touches: string | any[]; target: any; srcElement: any; }} e
+	 */
 	_onMove: function (e) {
 		// Ignore simulated events, since we handle both touch and
 		// mouse explicitly; otherwise we risk getting duplicates of
@@ -192,6 +198,9 @@ export var Draggable = Evented.extend({
 		this.fire('drag', e);
 	},
 
+	/**
+	 * @param {{ _simulated: any; }} e
+	 */
 	_onUp: function (e) {
 		// Ignore simulated events, since we handle both touch and
 		// mouse explicitly; otherwise we risk getting duplicates of

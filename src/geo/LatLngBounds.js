@@ -30,10 +30,14 @@ import {LatLng, toLatLng} from './LatLng';
  * can't be added to it with the `include` function.
  */
 
+/**
+ * @param {LatLng | LatLng[]} [corner1]
+ * @param {LatLng} [corner2]
+ */
 export function LatLngBounds(corner1, corner2) { // (LatLng, LatLng) or (LatLng[])
 	if (!corner1) { return; }
 
-	var latlngs = corner2 ? [corner1, corner2] : corner1;
+	var latlngs = corner2 ? [corner1, corner2] : [].concat(corner1);
 
 	for (var i = 0, len = latlngs.length; i < len; i++) {
 		this.extend(latlngs[i]);
@@ -42,12 +46,35 @@ export function LatLngBounds(corner1, corner2) { // (LatLng, LatLng) or (LatLng[
 
 LatLngBounds.prototype = {
 
+	/**
+	 * @type {LatLng|undefined}
+	 */
+	_southWest: undefined,
+
+	/**
+	 * @type {LatLng|undefined}
+	 */
+	_northEast: undefined,
+
+	/**
+	 * @type {Number|undefined}
+	 */
+	lat: undefined,
+	/**
+	 * @type {Number|undefined}
+	 */
+	lng: undefined,
+
+
 	// @method extend(latlng: LatLng): this
 	// Extend the bounds to contain the given point
 
 	// @alternative
 	// @method extend(otherBounds: LatLngBounds): this
 	// Extend the bounds to contain the given bounds
+	/**
+	 * @param {LatLngBounds|LatLng} obj
+	 */
 	extend: function (obj) {
 		var sw = this._southWest,
 		    ne = this._northEast,
@@ -84,6 +111,9 @@ LatLngBounds.prototype = {
 	// Returns bounds created by extending or retracting the current bounds by a given ratio in each direction.
 	// For example, a ratio of 0.5 extends the bounds by 50% in each direction.
 	// Negative values will retract the bounds.
+	/**
+	 * @param {number} bufferRatio
+	 */
 	pad: function (bufferRatio) {
 		var sw = this._southWest,
 		    ne = this._northEast,
@@ -157,6 +187,9 @@ LatLngBounds.prototype = {
 	// @alternative
 	// @method contains (latlng: LatLng): Boolean
 	// Returns `true` if the rectangle contains the given point.
+	/**
+	 * @param {LatLngBounds | LatLng} obj
+	 */
 	contains: function (obj) { // (LatLngBounds) or (LatLng) -> Boolean
 		if (typeof obj[0] === 'number' || obj instanceof LatLng || 'lat' in obj) {
 			obj = toLatLng(obj);
@@ -181,6 +214,9 @@ LatLngBounds.prototype = {
 
 	// @method intersects(otherBounds: LatLngBounds): Boolean
 	// Returns `true` if the rectangle intersects the given bounds. Two bounds intersect if they have at least one point in common.
+	/**
+	 * @param {LatLngBounds} bounds
+	 */
 	intersects: function (bounds) {
 		bounds = toLatLngBounds(bounds);
 
@@ -197,6 +233,9 @@ LatLngBounds.prototype = {
 
 	// @method overlaps(otherBounds: LatLngBounds): Boolean
 	// Returns `true` if the rectangle overlaps the given bounds. Two bounds overlap if their intersection is an area.
+	/**
+	 * @param {LatLngBounds} bounds
+	 */
 	overlaps: function (bounds) {
 		bounds = toLatLngBounds(bounds);
 
@@ -219,6 +258,10 @@ LatLngBounds.prototype = {
 
 	// @method equals(otherBounds: LatLngBounds, maxMargin?: Number): Boolean
 	// Returns `true` if the rectangle is equivalent (within a small margin of error) to the given bounds. The margin of error can be overridden by setting `maxMargin` to a small number.
+	/**
+	 * @param {LatLngBounds} bounds
+	 * @param {number} [maxMargin]
+	 */
 	equals: function (bounds, maxMargin) {
 		if (!bounds) { return false; }
 
@@ -243,9 +286,14 @@ LatLngBounds.prototype = {
 // @alternative
 // @factory L.latLngBounds(latlngs: LatLng[])
 // Creates a `LatLngBounds` object defined by the geographical points it contains. Very useful for zooming the map to fit a particular set of locations with [`fitBounds`](#map-fitbounds).
+/**
+ * @param {LatLng | LatLng[] | LatLngBounds} a
+ * @param {LatLng | number[]} [b]
+ */
 export function toLatLngBounds(a, b) {
 	if (a instanceof LatLngBounds) {
 		return a;
 	}
+	// @ts-ignore
 	return new LatLngBounds(a, b);
 }

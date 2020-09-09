@@ -1,7 +1,9 @@
 import * as Util from './Util';
 
-// @class Class
-// @aka L.Class
+/**
+ * @class Class
+ * @aka L.Class
+ */
 
 // @section
 // @uninheritable
@@ -112,11 +114,13 @@ Class.addInitHook = function (fn) { // (Function) || (String, args...)
 };
 
 function checkDeprecatedMixinEvents(includes) {
+	// @ts-ignore
 	if (typeof L === 'undefined' || !L || !L.Mixin) { return; }
 
 	includes = Util.isArray(includes) ? includes : [includes];
 
 	for (var i = 0; i < includes.length; i++) {
+		// @ts-ignore
 		if (includes[i] === L.Mixin.Events) {
 			console.warn('Deprecated include of L.Mixin.Events: ' +
 				'this property will be removed in future releases, ' +

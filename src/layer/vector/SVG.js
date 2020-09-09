@@ -6,6 +6,8 @@ import {stamp} from '../../core/Util';
 import {svgCreate, pointsToPath} from './SVG.Util';
 export {pointsToPath};
 import {vmlMixin, vmlCreate} from './SVG.VML';
+// eslint-disable-next-line no-unused-vars
+import {Layer} from '..';
 
 export var create = Browser.vml ? vmlCreate : svgCreate;
 
@@ -103,6 +105,9 @@ export var SVG = Renderer.extend({
 
 	// methods below are called by vector layers implementations
 
+	/**
+	 * @param {any} layer
+	 */
 	_initPath: function (layer) {
 		var path = layer._path = create('path');
 
@@ -127,17 +132,26 @@ export var SVG = Renderer.extend({
 		layer.addInteractiveTarget(layer._path);
 	},
 
+	/**
+	 * @param {Layer} layer
+	 */
 	_removePath: function (layer) {
 		DomUtil.remove(layer._path);
 		layer.removeInteractiveTarget(layer._path);
 		delete this._layers[stamp(layer)];
 	},
 
+	/**
+	 * @param {Layer} layer
+	 */
 	_updatePath: function (layer) {
 		layer._project();
 		layer._update();
 	},
 
+	/**
+	 * @param {Layer} layer
+	 */
 	_updateStyle: function (layer) {
 		var path = layer._path,
 		    options = layer.options;

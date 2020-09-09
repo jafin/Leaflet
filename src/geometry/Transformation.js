@@ -22,6 +22,12 @@ import * as Util from '../core/Util';
 
 // factory new L.Transformation(a: Number, b: Number, c: Number, d: Number)
 // Creates a `Transformation` object with the given coefficients.
+/**
+ * @param {number | any[number]} a
+ * @param {number} b
+ * @param {number} c
+ * @param {number} d
+ */
 export function Transformation(a, b, c, d) {
 	if (Util.isArray(a)) {
 		// use array properties
@@ -41,11 +47,19 @@ Transformation.prototype = {
 	// @method transform(point: Point, scale?: Number): Point
 	// Returns a transformed point, optionally multiplied by the given scale.
 	// Only accepts actual `L.Point` instances, not arrays.
+	/**
+	 * @param {{ clone: () => { x: number; y: number; }; }} point
+	 * @param {number} scale
+	 */
 	transform: function (point, scale) { // (Point, Number) -> Point
 		return this._transform(point.clone(), scale);
 	},
 
 	// destructive transform (faster)
+	/**
+	 * @param {{ x: number; y: number; }} point
+	 * @param {number} scale
+	 */
 	_transform: function (point, scale) {
 		scale = scale || 1;
 		point.x = scale * (this._a * point.x + this._b);
@@ -56,11 +70,15 @@ Transformation.prototype = {
 	// @method untransform(point: Point, scale?: Number): Point
 	// Returns the reverse transformation of the given point, optionally divided
 	// by the given scale. Only accepts actual `L.Point` instances, not arrays.
+	/**
+	 * @param {{ x: number; y: number; }} point
+	 * @param {number} scale
+	 */
 	untransform: function (point, scale) {
 		scale = scale || 1;
 		return new Point(
-		        (point.x / scale - this._b) / this._a,
-		        (point.y / scale - this._d) / this._c);
+			(point.x / scale - this._b) / this._a,
+			(point.y / scale - this._d) / this._c);
 	}
 };
 
@@ -74,6 +92,12 @@ Transformation.prototype = {
 // Expects an coefficients array of the form
 // `[a: Number, b: Number, c: Number, d: Number]`.
 
+/**
+ * @param {number} a
+ * @param {number} b
+ * @param {number} c
+ * @param {number} d
+ */
 export function toTransformation(a, b, c, d) {
 	return new Transformation(a, b, c, d);
 }

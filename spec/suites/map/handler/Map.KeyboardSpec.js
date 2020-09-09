@@ -7,15 +7,17 @@ describe("Map.Keyboard", function () {
 	const KEYCODE_PLUS = 171;
 	const KEYCODE_MINUS = 173;
 	const KEYCODE_ESC = 27;
+	const KEYCODE_TAB = 9;
 
 	var map, container;
 
 	beforeEach(function () {
 		container = document.createElement('div');
 		container.style.width = container.style.height = '600px';
-		container.style.top = container.style.left = 0;
+		container.style.top = container.style.left = '0';
 		container.style.position = 'absolute';
 		document.body.appendChild(container);
+		// @ts-ignore
 		map = L.map(container, {
 			zoomAnimation: false	// If true, the test has to wait extra 250msec
 		});
@@ -31,6 +33,35 @@ describe("Map.Keyboard", function () {
 	afterEach(function () {
 		map.remove();
 		document.body.removeChild(container);
+	});
+
+	describe("tab", function () {
+		it("tabs", function (done) {
+
+			const icon1 = new L.Icon.Default();
+			var marker = L.marker([0, 0], {icon: icon1});
+			map.addLayer(marker);
+			happen.click(marker._icon);
+
+			happen.keydown(document,  {keyCode: KEYCODE_TAB});
+			happen.keypress(document, {keyCode: KEYCODE_TAB});
+			happen.keyup(document,    {keyCode: KEYCODE_TAB});
+
+			happen.keydown(document,  {keyCode: KEYCODE_TAB});
+			happen.keypress(document, {keyCode: KEYCODE_TAB});
+			happen.keyup(document,    {keyCode: KEYCODE_TAB});
+
+			happen.keydown(document,  {keyCode: KEYCODE_TAB});
+			happen.keypress(document, {keyCode: KEYCODE_TAB});
+			happen.keyup(document,    {keyCode: KEYCODE_TAB});
+
+			setTimeout(function () {
+				expect(map.getCenter().lat).to.be.greaterThan(0);
+				done();
+			}, 30000);
+			console.log('hi');
+		}
+		);
 	});
 
 	describe("arrow keys", function () {

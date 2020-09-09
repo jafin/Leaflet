@@ -1,6 +1,8 @@
 import {Evented} from '../core/Events';
 import {Map} from '../map/Map';
 import * as Util from '../core/Util';
+// eslint-disable-next-line no-unused-vars
+import {LayerGroup} from '.';
 
 /*
  * @class Layer
@@ -47,6 +49,9 @@ export var Layer = Evented.extend({
 	 *
 	 * @method addTo(map: Map|LayerGroup): this
 	 * Adds the layer to the given map or layer group.
+	 */
+	/**
+	 * @param {Map|LayerGroup} map
 	 */
 	addTo: function (map) {
 		map.addLayer(this);

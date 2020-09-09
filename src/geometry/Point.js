@@ -1,6 +1,7 @@
 import {isArray, formatNum} from '../core/Util';
 
-/*
+
+/**
  * @class Point
  * @aka L.Point
  *
@@ -24,6 +25,11 @@ import {isArray, formatNum} from '../core/Util';
  * can't be added to it with the `include` function.
  */
 
+/**
+ * @param {number} x
+ * @param {number} y
+ * @param {boolean} [round]
+ */
 export function Point(x, y, round) {
 	// @property x: Number; The `x` coordinate of the point
 	this.x = (round ? Math.round(x) : x);
@@ -37,6 +43,11 @@ var trunc = Math.trunc || function (v) {
 
 Point.prototype = {
 
+	/**
+	 * @type {number|undefined}
+	 */
+	_code: undefined,
+
 	// @method clone(): Point
 	// Returns a copy of the current point.
 	clone: function () {
@@ -45,11 +56,17 @@ Point.prototype = {
 
 	// @method add(otherPoint: Point): Point
 	// Returns the result of addition of the current and the given points.
+	/**
+	 * @param {Point} point
+	 */
 	add: function (point) {
 		// non-destructive, returns a new point
 		return this.clone()._add(toPoint(point));
 	},
 
+	/**
+	 * @param {Point} point
+	 */
 	_add: function (point) {
 		// destructive, used directly for performance in situations where it's safe to modify existing point
 		this.x += point.x;
@@ -59,10 +76,16 @@ Point.prototype = {
 
 	// @method subtract(otherPoint: Point): Point
 	// Returns the result of subtraction of the given point from the current.
+	/**
+	 * @param {Point} point
+	 */
 	subtract: function (point) {
 		return this.clone()._subtract(toPoint(point));
 	},
 
+	/**
+	 * @param {Point} point
+	 */
 	_subtract: function (point) {
 		this.x -= point.x;
 		this.y -= point.y;
@@ -71,10 +94,16 @@ Point.prototype = {
 
 	// @method divideBy(num: Number): Point
 	// Returns the result of division of the current point by the given number.
+	/**
+	 * @param {Number} num
+	 */
 	divideBy: function (num) {
 		return this.clone()._divideBy(num);
 	},
 
+	/**
+	 * @param {Number} num
+	 */
 	_divideBy: function (num) {
 		this.x /= num;
 		this.y /= num;
@@ -83,10 +112,16 @@ Point.prototype = {
 
 	// @method multiplyBy(num: Number): Point
 	// Returns the result of multiplication of the current point by the given number.
+	/**
+	 * @param {Number} num
+	 */
 	multiplyBy: function (num) {
 		return this.clone()._multiplyBy(num);
 	},
 
+	/**
+	 * @param {Number} num
+	 */
 	_multiplyBy: function (num) {
 		this.x *= num;
 		this.y *= num;
@@ -170,6 +205,9 @@ Point.prototype = {
 
 	// @method equals(otherPoint: Point): Boolean
 	// Returns `true` if the given point has the same coordinates.
+	/**
+	 * @param {Point} point
+	 */
 	equals: function (point) {
 		point = toPoint(point);
 
@@ -179,6 +217,9 @@ Point.prototype = {
 
 	// @method contains(otherPoint: Point): Boolean
 	// Returns `true` if both coordinates of the given point are less than the corresponding current point coordinates (in absolute values).
+	/**
+	 * @param {Point} point
+	 */
 	contains: function (point) {
 		point = toPoint(point);
 
@@ -205,6 +246,11 @@ Point.prototype = {
 // @alternative
 // @factory L.point(coords: Object)
 // Expects a plain object of the form `{x: Number, y: Number}` instead.
+/**
+ * @param {number | Point} x
+ * @param {number} [y]
+ * @param {boolean} [round]
+ */
 export function toPoint(x, y, round) {
 	if (x instanceof Point) {
 		return x;

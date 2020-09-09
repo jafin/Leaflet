@@ -80,6 +80,10 @@ export var TileLayer = GridLayer.extend({
 		crossOrigin: false
 	},
 
+	/**
+	 * @param {any} url
+	 * @param {{ detectRetina: any; maxZoom: number; tileSize: number; zoomReverse: any; zoomOffset: number; minZoom: number; subdomains: string[]|string; }} options
+	 */
 	initialize: function (url, options) {
 
 		this._url = url;

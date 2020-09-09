@@ -44,6 +44,7 @@ var webkitVer = parseInt(/WebKit\/([0-9]+)|$/.exec(navigator.userAgent)[1], 10);
 export var androidStock = android && userAgentContains('Google') && webkitVer < 537 && !('AudioNode' in window);
 
 // @property opera: Boolean; `true` for the Opera browser
+// @ts-ignore
 export var opera = !!window.opera;
 
 // @property chrome: Boolean; `true` for the Chrome browser.
@@ -75,6 +76,7 @@ export var gecko3d = 'MozPerspective' in style;
 
 // @property any3d: Boolean
 // `true` for all browsers supporting CSS transforms.
+// @ts-ignore
 export var any3d = !window.L_DISABLE_3D && (ie3d || webkit3d || gecko3d) && !opera12 && !phantom;
 
 // @property mobile: Boolean; `true` for all browsers running in a mobile device.
@@ -100,7 +102,9 @@ export var pointer = !!(window.PointerEvent || msPointer);
 // This does not necessarily mean that the browser is running in a computer with
 // a touchscreen, it only means that the browser is capable of understanding
 // touch events.
+// @ts-ignore
 export var touch = !window.L_NO_TOUCH && (pointer || 'ontouchstart' in window ||
+		// @ts-ignore
 		(window.DocumentTouch && document instanceof window.DocumentTouch));
 
 // @property mobileOpera: Boolean; `true` for the Opera browser in a mobile device.
@@ -112,6 +116,7 @@ export var mobileGecko = mobile && gecko;
 
 // @property retina: Boolean
 // `true` for browsers on a high-resolution "retina" screen or on any screen when browser's display zoom is more than 100%.
+// @ts-ignore
 export var retina = (window.devicePixelRatio || (window.screen.deviceXDPI / window.screen.logicalXDPI)) > 1;
 
 // @property passiveEvents: Boolean
@@ -150,8 +155,10 @@ export var vml = !svg && (function () {
 		div.innerHTML = '<v:shape adj="1"/>';
 
 		var shape = div.firstChild;
+		// @ts-ignore
 		shape.style.behavior = 'url(#default#VML)';
 
+		// @ts-ignore
 		return shape && (typeof shape.adj === 'object');
 
 	} catch (e) {

@@ -2,6 +2,8 @@ import * as DomEvent from './DomEvent';
 import * as Util from '../core/Util';
 import {Point} from '../geometry/Point';
 import * as Browser from '../core/Browser';
+// eslint-disable-next-line no-unused-vars
+import {LeafletHTMLElement} from './LeafletHTMLElement';
 
 /*
  * @namespace DomUtil
@@ -168,7 +170,14 @@ export function setOpacity(el, value) {
 	}
 }
 
+/**
+ * @param {{ filters: { item: (arg0: string) => any; }; style: { filter: string; }; }} el
+ * @param {number} value
+ */
 function _setOpacityIE(el, value) {
+	/**
+	 * @type {any} filter
+	 */
 	var filter = false,
 	    filterName = 'DXImageTransform.Microsoft.Alpha';
 
@@ -195,6 +204,9 @@ function _setOpacityIE(el, value) {
 // Goes through the array of style names and returns the first name
 // that is a valid style name for an element. If no such name is found,
 // it returns false. Useful for vendor-prefixed styles like `transform`.
+/**
+ * @param {string | any[]} props
+ */
 export function testProp(props) {
 	var style = document.documentElement.style;
 
@@ -210,6 +222,11 @@ export function testProp(props) {
 // Resets the 3D CSS transform of `el` so it is translated by `offset` pixels
 // and optionally scaled by `scale`. Does not have an effect if the
 // browser doesn't support 3D CSS transforms.
+/**
+ * @param {LeafletHTMLElement} el
+ * @param {Point} offset
+ * @param {string} [scale]
+ */
 export function setTransform(el, offset, scale) {
 	var pos = offset || new Point(0, 0);
 
@@ -224,6 +241,10 @@ export function setTransform(el, offset, scale) {
 // Sets the position of `el` to coordinates specified by `position`,
 // using CSS translate or top/left positioning depending on the browser
 // (used by Leaflet internally to position its layers).
+/**
+ * @param {LeafletHTMLElement} el
+ * @param {Point} point
+ */
 export function setPosition(el, point) {
 
 	/*eslint-disable */
@@ -240,6 +261,9 @@ export function setPosition(el, point) {
 
 // @function getPosition(el: HTMLElement): Point
 // Returns the coordinates of an element previously positioned with setPosition.
+/**
+ * @param {LeafletHTMLElement} el
+ */
 export function getPosition(el) {
 	// this method is only used for elements previously positioned using setPosition,
 	// so it's safe to cache the position for performance

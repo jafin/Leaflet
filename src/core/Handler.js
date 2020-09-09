@@ -51,6 +51,7 @@ export var Handler = Class.extend({
 // @section There is static function which can be called without instantiating L.Handler:
 // @function addTo(map: Map, name: String): this
 // Adds a new Handler to the given map with the given name.
+// @ts-ignore
 Handler.addTo = function (map, name) {
 	map.addHandler(name, this);
 	return this;

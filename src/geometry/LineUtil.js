@@ -19,6 +19,10 @@ import * as Util from '../core/Util';
 // each zoom level and also reducing visual noise. tolerance affects the amount of
 // simplification (lesser value means higher quality but slower and with more points).
 // Also released as a separated micro-library [Simplify.js](http://mourner.github.com/simplify-js/).
+/**
+ * @param {string | any[]} points
+ * @param {number} tolerance
+ */
 export function simplify(points, tolerance) {
 	if (!tolerance || !points.length) {
 		return points.slice();
@@ -37,17 +41,32 @@ export function simplify(points, tolerance) {
 
 // @function pointToSegmentDistance(p: Point, p1: Point, p2: Point): Number
 // Returns the distance between point `p` and segment `p1` to `p2`.
+/**
+ * @param {{ x: number; y: number; }} p
+ * @param {{ x: any; y: any; }} p1
+ * @param {{ x: number; y: number; }} p2
+ */
 export function pointToSegmentDistance(p, p1, p2) {
+	// @ts-ignore
 	return Math.sqrt(_sqClosestPointOnSegment(p, p1, p2, true));
 }
 
 // @function closestPointOnSegment(p: Point, p1: Point, p2: Point): Number
 // Returns the closest point from a point `p` on a segment `p1` to `p2`.
+/**
+ * @param {{ x: number; y: number; }} p
+ * @param {{ x: any; y: any; }} p1
+ * @param {{ x: number; y: number; }} p2
+ */
 export function closestPointOnSegment(p, p1, p2) {
 	return _sqClosestPointOnSegment(p, p1, p2);
 }
 
 // Douglas-Peucker simplification, see http://en.wikipedia.org/wiki/Douglas-Peucker_algorithm
+/**
+ * @param {any[]} points
+ * @param {number} sqTolerance
+ */
 function _simplifyDP(points, sqTolerance) {
 
 	var len = points.length,
@@ -56,6 +75,7 @@ function _simplifyDP(points, sqTolerance) {
 
 	    markers[0] = markers[len - 1] = 1;
 
+	// @ts-ignore
 	_simplifyDPStep(points, markers, sqTolerance, 0, len - 1);
 
 	var i,
@@ -70,8 +90,16 @@ function _simplifyDP(points, sqTolerance) {
 	return newPoints;
 }
 
+/**
+ * @param {{ [x: string]: { x: number; y: number; }; }} points
+ * @param {any[] | Uint8Array} markers
+ * @param {number} sqTolerance
+ * @param {number} first
+ * @param {number} last
+ */
 function _simplifyDPStep(points, markers, sqTolerance, first, last) {
 
+	/** @type {number|Point} **/
 	var maxSqDist = 0,
 	index, i, sqDist;
 
@@ -93,6 +121,10 @@ function _simplifyDPStep(points, markers, sqTolerance, first, last) {
 }
 
 // reduce points that are too close to each other to a single point
+/**
+ * @param {string | any[]} points
+ * @param {number} sqTolerance
+ */
 function _reducePoints(points, sqTolerance) {
 	var reducedPoints = [points[0]];
 
@@ -115,6 +147,13 @@ var _lastCode;
 // [Cohen-Sutherland algorithm](https://en.wikipedia.org/wiki/Cohen%E2%80%93Sutherland_algorithm)
 // (modifying the segment points directly!). Used by Leaflet to only show polyline
 // points that are on the screen or near, increasing performance.
+/**
+ * @param {Point} a
+ * @param {Point} b
+ * @param {any} bounds
+ * @param {number} useLastCode
+ * @param {boolean} round
+ */
 export function clipSegment(a, b, bounds, useLastCode, round) {
 	var codeA = useLastCode ? _lastCode : _getBitCode(a, bounds),
 	    codeB = _getBitCode(b, bounds),
@@ -150,6 +189,13 @@ export function clipSegment(a, b, bounds, useLastCode, round) {
 	}
 }
 
+/**
+ * @param {{ x: number; y: number; }} a
+ * @param {{ x: number; y: number; }} b
+ * @param {number} code
+ * @param {{ min: any; max: any; }} bounds
+ * @param {boolean} round
+ */
 export function _getEdgeIntersection(a, b, code, bounds, round) {
 	var dx = b.x - a.x,
 	    dy = b.y - a.y,
@@ -177,6 +223,10 @@ export function _getEdgeIntersection(a, b, code, bounds, round) {
 	return new Point(x, y, round);
 }
 
+/**
+ * @param {Point} p
+ * @param {{ min: { x: number; y: number; }; max: { x: number; y: number; }; }} bounds
+ */
 export function _getBitCode(p, bounds) {
 	var code = 0;
 
@@ -196,6 +246,10 @@ export function _getBitCode(p, bounds) {
 }
 
 // square distance (to avoid unnecessary Math.sqrt calls)
+/**
+ * @param {{ x: number; y: number; }} p1
+ * @param {{ x: number; y: number; }} p2
+ */
 function _sqDist(p1, p2) {
 	var dx = p2.x - p1.x,
 	    dy = p2.y - p1.y;
@@ -203,6 +257,12 @@ function _sqDist(p1, p2) {
 }
 
 // return closest point on segment or distance to that point
+/**
+ * @param {{ x: number; y: number; }} p
+ * @param {{ x: any; y: any; }} p1
+ * @param {{ x: number; y: number; }} p2
+ * @param {boolean} [sqDist]
+ */
 export function _sqClosestPointOnSegment(p, p1, p2, sqDist) {
 	var x = p1.x,
 	    y = p1.y,
@@ -232,10 +292,16 @@ export function _sqClosestPointOnSegment(p, p1, p2, sqDist) {
 
 // @function isFlat(latlngs: LatLng[]): Boolean
 // Returns true if `latlngs` is a flat array, false is nested.
+/**
+ * @param {any[][]} latlngs
+ */
 export function isFlat(latlngs) {
 	return !Util.isArray(latlngs[0]) || (typeof latlngs[0][0] !== 'object' && typeof latlngs[0][0] !== 'undefined');
 }
 
+/**
+ * @param {any[][]} latlngs
+ */
 export function _flat(latlngs) {
 	console.warn('Deprecated use of _flat, please use L.LineUtil.isFlat instead.');
 	return isFlat(latlngs);

@@ -25,7 +25,13 @@ import {Point, toPoint} from './Point';
  * can't be added to it with the `include` function.
  */
 
+/**
+ * @param {any[]} [a]
+ * @param {number[]} [b]
+ * @constructor
+ */
 export function Bounds(a, b) {
+
 	if (!a) { return; }
 
 	var points = b ? [a, b] : a;
@@ -36,16 +42,25 @@ export function Bounds(a, b) {
 }
 
 Bounds.prototype = {
+
+	min: undefined,
+	max: undefined,
+
 	// @method extend(point: Point): this
 	// Extends the bounds to contain the given point.
+	/**
+	 * @param {Point} point
+	 */
 	extend: function (point) { // (Point)
+
 		point = toPoint(point);
 
-		// @property min: Point
+
 		// The top left corner of the rectangle.
 		// @property max: Point
 		// The bottom right corner of the rectangle.
 		if (!this.min && !this.max) {
+
 			this.min = point.clone();
 			this.max = point.clone();
 		} else {

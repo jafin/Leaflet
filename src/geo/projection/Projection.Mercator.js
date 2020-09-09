@@ -14,7 +14,9 @@ export var Mercator = {
 	R_MINOR: 6356752.314245179,
 
 	bounds: new Bounds([-20037508.34279, -15496570.73972], [20037508.34279, 18764656.23138]),
-
+	/**
+	 * @param {LatLng} latlng
+	 */
 	project: function (latlng) {
 		var d = Math.PI / 180,
 		    r = this.R,
@@ -29,6 +31,9 @@ export var Mercator = {
 		return new Point(latlng.lng * d * r, y);
 	},
 
+	/**
+	 * @param {Point} point
+	 */
 	unproject: function (point) {
 		var d = 180 / Math.PI,
 		    r = this.R,

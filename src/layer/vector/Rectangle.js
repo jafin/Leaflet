@@ -1,5 +1,6 @@
 import {Polygon} from './Polygon';
-import {toLatLngBounds} from '../../geo/LatLngBounds';
+// eslint-disable-next-line no-unused-vars
+import {toLatLngBounds, LatLngBounds} from '../../geo/LatLngBounds';
 
 /*
  * L.Rectangle extends Polygon and creates a rectangle when passed a LatLngBounds object.
@@ -29,16 +30,26 @@ import {toLatLngBounds} from '../../geo/LatLngBounds';
 
 
 export var Rectangle = Polygon.extend({
+	/**
+	 * @param {LatLngBounds} latLngBounds
+	 * @param {any} options
+	 */
 	initialize: function (latLngBounds, options) {
 		Polygon.prototype.initialize.call(this, this._boundsToLatLngs(latLngBounds), options);
 	},
 
 	// @method setBounds(latLngBounds: LatLngBounds): this
 	// Redraws the rectangle with the passed bounds.
+	/**
+	 * @param {LatLngBounds} latLngBounds
+	 */
 	setBounds: function (latLngBounds) {
 		return this.setLatLngs(this._boundsToLatLngs(latLngBounds));
 	},
 
+	/**
+	 * @param {LatLngBounds} latLngBounds
+	 */
 	_boundsToLatLngs: function (latLngBounds) {
 		latLngBounds = toLatLngBounds(latLngBounds);
 		return [
@@ -52,6 +63,10 @@ export var Rectangle = Polygon.extend({
 
 
 // @factory L.rectangle(latLngBounds: LatLngBounds, options?: Polyline options)
+/**
+ * @param {LatLngBounds} latLngBounds
+ * @param {any} [options]
+ */
 export function rectangle(latLngBounds, options) {
 	return new Rectangle(latLngBounds, options);
 }
