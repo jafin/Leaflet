@@ -86,7 +86,7 @@ module.exports = function (config) {
 		colors: true,
 
 		// enable / disable watching file and executing tests whenever any file changes
-		autoWatch: false,
+		autoWatch: true,
 
 		// Start these browsers, currently available:
 		// - Chrome
@@ -96,9 +96,14 @@ module.exports = function (config) {
 		// - Safari (only Mac)
 		// - PhantomJS
 		// - IE (only Windows)
-		browsers: ['PhantomJSCustom'],
+		// 'PhantomJSCustom',
+		browsers: ['ChromeDebugging'],
 
 		customLaunchers: {
+			ChromeDebugging: {
+				base: 'Chrome',
+				flags: ['--remote-debugging-port=9333']
+			  },
 			'Chrome1280x1024': {
 				base: 'ChromeHeadless',
 				// increased viewport is required for some tests (TODO fix tests)
@@ -150,6 +155,6 @@ module.exports = function (config) {
 
 		// Continuous Integration mode
 		// if true, it capture browsers, run tests and exit
-		singleRun: true
+		singleRun: false
 	});
 };

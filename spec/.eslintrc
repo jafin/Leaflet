@@ -4,13 +4,14 @@
     "no-console": 0,
   },
   "env": {
-    "mocha": true
+    "mocha": true,
   },
   "globals": {
     "expect": false,
     "sinon": false,
     "happen": false,
     "Hand": false,
+    "process": true,
     "touchEventType": false /* defined in SpecHelper.js */
   }
 }
