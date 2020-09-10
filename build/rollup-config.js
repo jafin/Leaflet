@@ -2,19 +2,19 @@
 // Config file for running Rollup in "normal" mode (non-watch)
 
 import rollupGitVersion from 'rollup-plugin-git-version';
-import json from 'rollup-plugin-json';
-import nodeResolve from '@rollup/plugin-node-resolve';
-import { terser } from "rollup-plugin-terser";
+import json from '@rollup/plugin-json';
+// import nodeResolve from '@rollup/plugin-node-resolve';
+import {terser} from 'rollup-plugin-terser';
 import babel from '@rollup/plugin-babel';
 import gitRev from 'git-rev-sync';
 import pkg from '../package.json';
-import { getBabelOutputPlugin } from '@rollup/plugin-babel';
-import replace from "rollup-plugin-replace";
-import builtins from "rollup-plugin-node-builtins";
-import globals from "rollup-plugin-node-globals";
-import clear from "rollup-plugin-clear";
+// import { getBabelOutputPlugin } from '@rollup/plugin-babel';
+// import replace from "rollup-plugin-replace";
+// import builtins from "rollup-plugin-node-builtins";
+// import globals from "rollup-plugin-node-globals";
+// import clear from "rollup-plugin-clear";
 
-let { version } = pkg;
+let {version} = pkg;
 let release;
 
 // Skip the git branch+rev in the banner when doing a release build
@@ -45,7 +45,8 @@ window.L = exports;`;
 export default () => {
 	const buildType = typeof process.env.ROLLUP_BUILD_TYPE !== 'undefined'
     	? process.env.ROLLUP_BUILD_TYPE
-    	: 'modern';
+		: 'modern';
+	console.log('BuildType:', buildType);
 	return {
 		input: 'src/Leaflet.js',
 		output: buildType === 'modern'  ?
@@ -72,7 +73,7 @@ export default () => {
 			// 	presets: ['@babel/preset-env']
 			// }),
 			babel({
-				   /**
+				/**
                 * Uncomment to ignore node_modules. This will accelerate yur build,
                 * but prevent you from using modern syntax in your dependencies
                 */
