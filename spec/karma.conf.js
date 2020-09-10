@@ -1,4 +1,7 @@
-var json = require('rollup-plugin-json');
+const json = require('@rollup/plugin-json');
+const babel = require('@rollup/plugin-babel').default;
+const resolve = require('@rollup/plugin-node-resolve').default;
+const progress = require('rollup-plugin-progress');
 
 const outro = `var oldL = window.L;
 exports.noConflict = function() {
@@ -12,7 +15,7 @@ window.L = exports;`;
 // Karma configuration
 module.exports = function (config) {
 
-// 	var libSources = require(__dirname + '/../build/build.js').getFiles();
+	// 	var libSources = require(__dirname + '/../build/build.js').getFiles();
 
 	var files = [
 		"spec/before.js",
@@ -60,7 +63,16 @@ module.exports = function (config) {
 		preprocessors: preprocessors,
 		rollupPreprocessor: {
 			plugins: [
-				json()
+				resolve(),
+				progress(),
+				json(),
+				babel({
+					/**
+					* Uncomment to ignore node_modules. This will accelerate yur build,
+					* but prevent you from using modern syntax in your dependencies
+					*/
+					// exclude: "node_modules/**"
+				})
 			],
 			output: {
 				format: 'umd',
@@ -97,7 +109,7 @@ module.exports = function (config) {
 		// - PhantomJS
 		// - IE (only Windows)
 		// 'PhantomJSCustom',
-		browsers: ['ChromeDebugging'],
+		browsers: ['Chrome'],
 
 		customLaunchers: {
 			ChromeDebugging: {

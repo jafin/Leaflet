@@ -107,8 +107,8 @@ LatLng.prototype = {
 		    lngAccuracy = latAccuracy / Math.cos((Math.PI / 180) * this.lat);
 
 		return toLatLngBounds(
-		        new LatLng(this.lat - latAccuracy, this.lng - lngAccuracy),
-		        new LatLng(this.lat + latAccuracy, this.lng + lngAccuracy));
+		        [this.lat - latAccuracy, this.lng - lngAccuracy],
+		        [this.lat + latAccuracy, this.lng + lngAccuracy]);
 	},
 
 	clone: function () {
@@ -138,7 +138,7 @@ export function toLatLng(a, b, c) {
 	if (a instanceof LatLng) {
 		return a;
 	}
-	if (Array.isArray(a) && typeof a[0] !== 'object') {
+	if (Util.isArray(a) && typeof a[0] !== 'object') {
 		if (a.length === 3) {
 			return new LatLng(a[0], a[1], a[2]);
 		}

@@ -1,3 +1,4 @@
+/* eslint-env node */
 /* eslint-disable camelcase */
 // Config file for running Rollup in "normal" mode (non-watch)
 
@@ -8,11 +9,9 @@ import {terser} from 'rollup-plugin-terser';
 import babel from '@rollup/plugin-babel';
 import gitRev from 'git-rev-sync';
 import pkg from '../package.json';
-// import replace from "rollup-plugin-replace";
 import builtins from 'rollup-plugin-node-builtins';
 import globals from 'rollup-plugin-node-globals';
 import progress from 'rollup-plugin-progress';
-// import clear from "rollup-plugin-clear";
 
 let {version} = pkg;
 let release;
@@ -43,9 +42,9 @@ exports.noConflict = function() {
 window.L = exports;`;
 
 export default () => {
-	const buildType = typeof process.env.ROLLUP_BUILD_TYPE !== 'undefined'
-    	? process.env.ROLLUP_BUILD_TYPE
-		: 'modern';
+	const buildType = typeof process.env.ROLLUP_BUILD_TYPE !== 'undefined' ?
+		process.env.ROLLUP_BUILD_TYPE :
+		'modern';
 	console.log('BuildType:', buildType);
 	return {
 		input: 'src/Leaflet.js',

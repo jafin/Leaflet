@@ -287,7 +287,7 @@ LatLngBounds.prototype = {
 // @factory L.latLngBounds(latlngs: LatLng[])
 // Creates a `LatLngBounds` object defined by the geographical points it contains. Very useful for zooming the map to fit a particular set of locations with [`fitBounds`](#map-fitbounds).
 /**
- * @param {LatLng | LatLng[] | LatLngBounds} a
+ * @param {LatLng | LatLng[] | LatLngBounds | number[] } a
  * @param {LatLng | number[]} [b]
  */
 export function toLatLngBounds(a, b) {

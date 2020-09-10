@@ -35,34 +35,34 @@ describe("Map.Keyboard", function () {
 		document.body.removeChild(container);
 	});
 
-	describe("tab", function () {
-		it("tabs", function (done) {
+	// describe("tab", function () {
+	// 	it("tabs", function (done) {
 
-			const icon1 = new L.Icon.Default();
-			var marker = L.marker([0, 0], {icon: icon1});
-			map.addLayer(marker);
-			happen.click(marker._icon);
+	// 		const icon1 = new L.Icon.Default();
+	// 		var marker = L.marker([0, 0], {icon: icon1});
+	// 		map.addLayer(marker);
+	// 		happen.click(marker._icon);
 
-			happen.keydown(document,  {keyCode: KEYCODE_TAB});
-			happen.keypress(document, {keyCode: KEYCODE_TAB});
-			happen.keyup(document,    {keyCode: KEYCODE_TAB});
+	// 		happen.keydown(document,  {keyCode: KEYCODE_TAB});
+	// 		happen.keypress(document, {keyCode: KEYCODE_TAB});
+	// 		happen.keyup(document,    {keyCode: KEYCODE_TAB});
 
-			happen.keydown(document,  {keyCode: KEYCODE_TAB});
-			happen.keypress(document, {keyCode: KEYCODE_TAB});
-			happen.keyup(document,    {keyCode: KEYCODE_TAB});
+	// 		happen.keydown(document,  {keyCode: KEYCODE_TAB});
+	// 		happen.keypress(document, {keyCode: KEYCODE_TAB});
+	// 		happen.keyup(document,    {keyCode: KEYCODE_TAB});
 
-			happen.keydown(document,  {keyCode: KEYCODE_TAB});
-			happen.keypress(document, {keyCode: KEYCODE_TAB});
-			happen.keyup(document,    {keyCode: KEYCODE_TAB});
+	// 		happen.keydown(document,  {keyCode: KEYCODE_TAB});
+	// 		happen.keypress(document, {keyCode: KEYCODE_TAB});
+	// 		happen.keyup(document,    {keyCode: KEYCODE_TAB});
 
-			setTimeout(function () {
-				expect(map.getCenter().lat).to.be.greaterThan(0);
-				done();
-			}, 30000);
-			console.log('hi');
-		}
-		);
-	});
+	// 		setTimeout(function () {
+	// 			expect(map.getCenter().lat).to.be.greaterThan(0);
+	// 			done();
+	// 		}, 30000);
+	// 		console.log('hi');
+	// 	}
+	// 	);
+	// });
 
 	describe("arrow keys", function () {
 		it("move the map north", function (done) {
