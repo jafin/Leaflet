@@ -3,15 +3,15 @@
 
 import rollupGitVersion from 'rollup-plugin-git-version';
 import json from '@rollup/plugin-json';
-// import nodeResolve from '@rollup/plugin-node-resolve';
+import nodeResolve from '@rollup/plugin-node-resolve';
 import {terser} from 'rollup-plugin-terser';
 import babel from '@rollup/plugin-babel';
 import gitRev from 'git-rev-sync';
 import pkg from '../package.json';
-// import { getBabelOutputPlugin } from '@rollup/plugin-babel';
 // import replace from "rollup-plugin-replace";
-// import builtins from "rollup-plugin-node-builtins";
-// import globals from "rollup-plugin-node-globals";
+import builtins from 'rollup-plugin-node-builtins';
+import globals from 'rollup-plugin-node-globals';
+import progress from 'rollup-plugin-progress';
 // import clear from "rollup-plugin-clear";
 
 let {version} = pkg;
@@ -56,22 +56,63 @@ export default () => {
 				banner: banner,
 				sourcemap: true,
 				freeze: false,
-			} :
-			{
-				file: pkg.main,
-				format: 'umd',
-				name: 'L',
-				banner: banner,
-				outro: outro,
-				sourcemap: true,
-				// legacy: true, // Needed to create files loadable by IE8
-				freeze: false,
-			},
+			} : [
+				{
+					file: 'dist/leaflet.js',
+					format: 'umd',
+					name: 'L',
+					banner: banner,
+					outro: outro,
+					sourcemap: true,
+					freeze: false,
+					plugins: [
+						terser({
+							compress: {
+								unused: false,
+								collapse_vars: false
+							},
+							ecma: buildType === 'legacy' ? 5 : 2017,
+							safari10: true,
+							ie8: true
+						})
+					]
+				},
+				{
+					file: 'dist/leaflet-src.js',
+					format: 'umd',
+					name: 'L',
+					banner: banner,
+					outro: outro,
+					sourcemap: true,
+					freeze: false,
+					plugins: [
+						terser({
+							compress: false,
+							mangle: false,
+							keep_classnames: true,
+							keep_fnames: true,
+							toplevel: false,
+							ecma: buildType === 'legacy' ? 5 : 2017,
+							safari10: true,
+							format: {
+								beautify: true,
+								comments: true
+							},
+							ie8:true
+						})
+					]
+				},
+
+				{
+					file: 'dist/leaflet-src.esm.js',
+					format: 'esm',
+					banner: banner,
+					sourcemap: true,
+					freeze: false,
+				}],
 		plugins: [
-			// resolve(),
-			// getBabelOutputPlugin({
-			// 	presets: ['@babel/preset-env']
-			// }),
+			progress(),
+			nodeResolve(),
 			babel({
 				/**
                 * Uncomment to ignore node_modules. This will accelerate yur build,
@@ -79,15 +120,8 @@ export default () => {
                 */
 				// exclude: "node_modules/**"
 			}),
-			terser({
-				compress: {
-					unused: false,
-					collapse_vars: false
-				},
-				// sourcemap: true,
-				ecma: buildType === 'legacy' ? 5 : 2017,
-				safari10: true,
-			}),
+			globals(),
+			builtins(),
 			release ? json() : rollupGitVersion(),
 		],
 	};
